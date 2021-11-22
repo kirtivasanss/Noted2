@@ -13,6 +13,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { RFValue } from "react-native-responsive-fontsize";
 import * as Google from "expo-google-app-auth";
 import firebase from "firebase";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 
 
@@ -39,7 +40,6 @@ export default class LoginScreen extends Component {
           firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
           providerData[i].uid === googleUser.getBasicProfile().getId()
         ) {
-          // We don't need to reauth the Firebase connection.
           return true;
         }
       }
@@ -48,18 +48,13 @@ export default class LoginScreen extends Component {
   };
 
   onSignIn = googleUser => {
-    // We need to register an Observer on Firebase Auth to make sure auth is initialized.
     var unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
       unsubscribe();
-      // Check if we are already signed-in Firebase with the correct user.
       if (!this.isUserEqual(googleUser, firebaseUser)) {
-        // Build Firebase credential with the Google ID token.
         var credential = firebase.auth.GoogleAuthProvider.credential(
           googleUser.idToken,
           googleUser.accessToken
         );
-
-        // Sign in with credential from the Google user.
         firebase
           .auth()
           .signInWithCredential(credential)
@@ -80,12 +75,9 @@ export default class LoginScreen extends Component {
             }
           })
           .catch(error => {
-            // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
-            // The email of the user's account used.
             var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
             var credential = error.credential;
             // ...
           });
@@ -124,6 +116,10 @@ export default class LoginScreen extends Component {
         <View style={styles.container}>
           <SafeAreaView style={styles.droidSafeArea} />
           <View style={styles.appTitle}>
+           <Image
+              source={require("../assets/note.png")}
+              style={styles.appIcon}
+            ></Image>
             <Text style={styles.appTitleText}>{`Noted App`}</Text>
           </View>
           <View style={styles.buttonContainer}>
@@ -131,6 +127,10 @@ export default class LoginScreen extends Component {
               style={styles.button}
               onPress={() => this.signInWithGoogleAsync()}
             >
+            <Image
+                source={require("../assets/google-logo.png")}
+                style={styles.googleIcon}
+              ></Image>
              
               <Text style={styles.googleText}>Sign in with Google</Text>
             </TouchableOpacity>
@@ -145,7 +145,7 @@ export default class LoginScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#15193c"
+    backgroundColor: "rgb(0, 37, 77)"
   },
   droidSafeArea: {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : RFValue(35)
@@ -155,16 +155,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  // appIcon: {
-  //   width: RFValue(130),
-  //   height: RFValue(130),
-  //   resizeMode: "contain"
-  // },
+  appIcon: {
+    width: RFValue(150),
+    height: RFValue(230),
+    resizeMode: "contain"
+  },
   appTitleText: {
-    color: "white",
+    color: "rgb(204, 135,72)",
     textAlign: "center",
-    fontSize: RFValue(40),
-    fontFamily: "Bubblegum-Sans"
+    fontSize: RFValue(60),
+    fontFamily: "Bubblegum-Sans",
   },
   buttonContainer: {
     flex: 0.3,
@@ -178,25 +178,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     borderRadius: RFValue(30),
-    backgroundColor: "white"
+    backgroundColor: "rgb(204, 135,72)",
   },
-  // googleIcon: {
-  //   width: RFValue(30),
-  //   height: RFValue(30),
-  //   resizeMode: "contain"
-  // },
+  googleIcon: {
+    width: RFValue(30),
+    height: RFValue(30),
+    resizeMode: "contain"
+  },
   googleText: {
-    color: "black",
+    color: "rgb(0, 37, 77)",
     fontSize: RFValue(20),
-    fontFamily: "Bubblegum-Sans"
+    fontWeight:"bold"
   },
-  // cloudContainer: {
-  //   flex: 0.3
-  // },
-  // cloudImage: {
-  //   position: "absolute",
-  //   width: "100%",
-  //   resizeMode: "contain",
-  //   bottom: RFValue(-5)
-  // }
+
 });

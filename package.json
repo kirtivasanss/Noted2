@@ -27,6 +27,7 @@
     "@react-navigation/drawer": "^5.12.5",
     "@react-navigation/native": "^5.9.4",
     "react-native-vector-icons": "*",
+    "react-native-dropdown-picker": "*",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-safe-area-context": "3.2.0",
     "react-native-responsive-fontsize": "*",
